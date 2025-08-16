@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %} PhotHub - Share Your World {% endblock title %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Logo */
+    .navbar-brand span {
+      font-weight: 800;
+      letter-spacing: -1px;
+      font-size: 1.5rem;
+    }
+
+    .navbar-brand span.logo-icon {
+      color: #ffffff;
+      background-color: #0d6efd;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+    .sidebar {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      height: 100%;
+    }
+
+    .category-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .category-item:hover {
+      color: #0d6efd;
+    }
+
+    .banner {
+      background: url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?auto=format&fit=crop&w=1500&q=80') no-repeat center center;
+      background-size: cover;
+      height: 320px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner .overlay {
+      background-color: rgba(13, 110, 253, 0.65); /* Bootstrap primary with transparency */
+      border-radius: 15px;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1;
+    }
+
+    .banner .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .photo-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .photo-card:hover {
+      transform: scale(1.02);
+    }
+
+    .photo-img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    /* Sticky navbar */
+    nav.navbar.sticky-top {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      background-color: #ffffffcc;
+      backdrop-filter: saturate(180%) blur(10px);
+    }
+
+    /* Nav link backgrounds and styling */
+    .navbar-nav .nav-link {
+      position: relative;
+      color: #333;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      background-color: #0d6efd;
+      color: #fff !important;
+      box-shadow: 0 0 8px rgba(13, 110, 253, 0.6);
+      text-decoration: none;
+    }
+
+    /* Boxy search bar styling */
+    .navbar-search {
+      display: flex;
+      max-width: 300px;
+      margin-left: 1rem;
+      border: 1px solid #ced4da;
+      background-color: white;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .navbar-search input {
+      border: none;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      flex-grow: 1;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .navbar-search input:focus {
+      outline: none;
+      box-shadow: none;
+      border-color: #0d6efd;
+      background-color: #fff;
+    }
+
+    .navbar-search button {
+      border: none;
+      background-color: #0d6efd;
+      color: white;
+      padding: 0 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar-search button:hover {
+      background-color: #084298;
+    }
+
+    /* Icon inside button */
+    .navbar-search button svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* User profile avatar in navbar */
+    .navbar-profile {
+      margin-left: 1rem;
+      position: relative;
+    }
+
+    .navbar-profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      object-fit: cover;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .navbar-profile img:hover,
+    .navbar-profile.show img {
+      border-color: #0d6efd;
+    }
+
+    @media (max-width: 991.98px) {
+      /* Stack search bar and profile below nav links on smaller screens */
+      .navbar-collapse {
+        flex-direction: column;
+      }
+      .navbar-search {
+        margin-left: 0;
+        margin-top: 10px;
+        max-width: 100%;
+      }
+      .navbar-profile {
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light border-bottom shadow-sm py-3 sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <span class="logo-icon">P</span><span>PhotHub</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Explore</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Upload</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+        </ul>
+
+        <!-- Search bar -->
+        <form class="navbar-search" role="search" onsubmit="event.preventDefault(); alert('Search feature coming soon!');">
+          <input type="search" placeholder="Search photos..." aria-label="Search photos" />
+          <button type="submit" aria-label="Search">
+            Search
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M21.71 20.29l-4.388-4.388A7.943 7.943 0 0016 10a8 8 0 10-8 8 7.943 7.943 0 005.902-2.678l4.388 4.388a1 1 0 001.414-1.414zM4 10a6 6 0 1112 0 6 6 0 01-12 0z"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- User profile dropdown -->
+        <div class="dropdown navbar-profile ms-3">
+          <a href="#" class="d-block" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Profile" />
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
+            <li><a class="dropdown-item" href="#">My Profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+{% block content %}
+  <!-- Banner with Overlay -->
+  <div class="container mt-4">
+    <div class="banner position-relative text-white">
+      <div class="overlay"></div>
+      <div class="content">
+        <h1 class="fw-bold display-5">Discover & Share Beautiful Moments</h1>
+        <p class="lead">Join the PhotHub community and showcase your world through stunning images.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 mb-4">
+        <div class="sidebar">
+          <h5 class="mb-3">Categories</h5>
+          {% for category in categories %}
+          <div class="category-item">{{category.category_name}}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Photo Grid -->
+      <div class="col-md-9">
+        <div class="row g-4">
+
+          <!-- Photo Card 1 -->
+          {% for post in posts %}
+          <div class="col-sm-6 col-lg-4">
+            <div class="card photo-card">
+              <img src="{{ post.Post_image.url }}" class="img-fluid w-100" style="object-fit: cover; height: 250px;" alt="Photo" />
+
+              <!-- <img src="{{ post.Post_image.url }}" class="card-img-top photo-img" alt="Photo" /> -->
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                  {% if post.User.profile_Image %}
+                  <img src="{{post.User.profile_Image.url}}" class="user-avatar" alt="User" />
+                  {% else %}
+                  <img src="" class="user-avatar" alt="User" />
+                  {% endif %}
+                  <div>
+                    <strong>{{post.User.username}}</strong><br />
+                    <small class="text-muted">2h ago</small>
+                  </div>
+                </div>
+                <h6 class="card-title mb-1">{{post.Title}}</h6>
+                <small class="text-muted">❤ 320 likes</small><br />
+                <a href="{% url 'picture' post.id %}" class="btn btn-primary btn-sm mt-3">View More</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock content %}
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends 'pages/home.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PhotHub - View Image</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+{% block content %}
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .photo-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin: 40px auto;
+      max-width: 700px;
+    }
+
+    .photo-img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .btn-back {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+ 
+  <!-- Photo Card View -->
+  <div class="card photo-card">
+    <img src="{{picture.Post_image.url}}" class="img-fluid w-100" style="object-fit: cover; height: 250px;" alt="Photo" />
+    <div class="card-body">
+      <div class="d-flex align-items-center mb-3">
+        <img src="{{picture.User.profile_Image.url}}" class="user-avatar" alt="User" />
+        <div>
+          <strong>{{picture.User.username}}</strong><br>
+          <small class="text-muted">Posted 2h ago</small>
+        </div>
+      </div>
+      <h5 class="card-title">Coastal Sunrise</h5>
+      <p class="card-text">
+        {{picture.description}}
+      </p>
+      <a href="javascript:history.back()" class="btn btn-outline-primary btn-back">← Go Back</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock content %}
+</body>
+</html>
