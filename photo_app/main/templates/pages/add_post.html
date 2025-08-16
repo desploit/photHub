@@ -52,40 +52,41 @@
   <!-- New Image Post Form -->
   <div class="post-form-container">
     <h2>Create New Image Post</h2>
-    <form id="imagePostForm" onsubmit="event.preventDefault(); alert('Image posted successfully!');">
+    <form id="imagePostForm"  method="POST">
+      {% csrf_token %}
       
       <div class="mb-3">
-        <label for="imageTitle" class="form-label">Image Title</label>
-        <input type="text" class="form-control" id="imageTitle" placeholder="Enter image title" required />
+        <label for="imageTitle" class="form-label">Post Title</label>
+        <input type="text" class="form-control" id="imageTitle" placeholder="Enter image title" name="post_title" required />
       </div>
 
       <div class="mb-3">
         <label for="imageDescription" class="form-label">Description</label>
-        <textarea class="form-control" id="imageDescription" rows="4" placeholder="Write a description..." required></textarea>
+        <textarea class="form-control" id="imageDescription" rows="4" placeholder="Write a description..." name="post_description" required></textarea>
       </div>
 
       <div class="mb-3">
         <label for="imageFile" class="form-label">Upload Image</label>
-        <input class="form-control" type="file" id="imageFile" accept="image/*" required />
+        <input class="form-control" type="file" id="imageFile"  name="Image_url" required />
       </div>
 
       <div class="mb-3">
         <label for="categorySelect" class="form-label">Category</label>
-        <select class="form-select" id="categorySelect" required>
+        <select class="form-select" id="categorySelect" name="Post_category" required>
           <option value="" disabled selected>Select category</option>
           
           {% for category in categories %}
-           <option value="nature">{{category.category_name}}</option>
+           <option value="{{category.category_name}}">{{category.category_name}}</option>
           {% endfor %}
         </select>
       </div>
 
       <div class="mb-4">
         <label for="visibilitySelect" class="form-label">Select user</label>
-        <select class="form-select" id="visibilitySelect" required>
+        <select class="form-select" id="visibilitySelect" name="Post_user" required>
           <option value="" disabled selected>Select user</option>
           {% for user in users %}
-            <option value="followers">{{user.username}}</option>
+            <option value="{{user.username}}">{{user.username}}</option>
           {% endfor %}
         </select>
       </div>

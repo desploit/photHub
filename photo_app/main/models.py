@@ -38,7 +38,7 @@ class User(models.Model):
 
 
 class Post(models.Model):
-    User = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     category = models.ForeignKey(Post_category, blank=False, null=False, on_delete=models.CASCADE)
     Title = models.CharField(max_length=50, blank=False, null=False)
     description = models.TextField(blank=True, null=True)
